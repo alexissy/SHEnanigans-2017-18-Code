@@ -72,6 +72,7 @@ public class Teleop extends OpMode{
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Driver");    //
+        robot.colorArm.setPosition(45);
     }
 
     /*
@@ -96,16 +97,22 @@ public class Teleop extends OpMode{
         double left;
         double right;
         double pulley;
+        double leftG;
+        double rightG;
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
-        left = -gamepad1.left_stick_y;
-        right = -gamepad1.right_stick_y;
+        left = gamepad1.left_stick_y;
+        right = gamepad1.right_stick_y;
         pulley = -gamepad2.left_stick_y;
+        //leftG = gamepad2.right_stick_y;
+        //rightG = gamepad2.right_stick_y;
 
 
         robot.leftDrive.setPower(left);
         robot.rightDrive.setPower(right);
         robot.pulleyMotor.setPower(pulley);
+        //robot.leftGripper.setPosition(leftG);
+        //robot.rightGripper.setPosition(rightG);
 
         // Use gamepad left & right Bumpers to open and close the claw
         if (gamepad1.right_bumper)

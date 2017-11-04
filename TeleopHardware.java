@@ -21,7 +21,7 @@ public class TeleopHardware {
     public Servo    rightGripper   = null;
     public Servo    colorArm = null;
     public BNO055IMU imu = null;
-    public ColorSensor colorSensor = null;
+    //public ColorSensor colorSensor = null;
 
     public static final double MID_SERVO       =  0.5 ;
     public static final double ARM_UP_POWER    =  0.45 ;
@@ -49,6 +49,7 @@ public class TeleopHardware {
         rightGripper = hwMap.get(Servo.class, "right_gripper");
         colorArm = hwMap.get(Servo.class, "color_arm");
         imu = hwMap.get(BNO055IMU.class, "imu");
+        //colorSensor = hwMap.get(ColorSensor.class, "color_sensor");
 
         //
 
