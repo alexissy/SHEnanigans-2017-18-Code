@@ -12,8 +12,8 @@ import com.qualcomm.robotcore.util.Range;
 public class TestTeleopServo extends OpMode{
     TeleopHardware robot       = new TeleopHardware(); // use the class created to define a Pushbot's hardware
     // could also use HardwarePushbotMatrix class.
-    double          clawOffset  = 0.0 ;                  // Servo mid position
-    final double    CLAW_SPEED  = 0.02 ;                 // sets rate to move servo
+    private double          clawOffset  = 0.0 ;                  // Servo mid position
+    private final double    CLAW_SPEED  = 0.1 ;                 // sets rate to move servo
 
     /*
      * Code to run ONCE when the driver hits INIT

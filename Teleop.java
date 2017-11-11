@@ -104,15 +104,15 @@ public class Teleop extends OpMode{
         left = gamepad1.left_stick_y;
         right = gamepad1.right_stick_y;
         pulley = -gamepad2.left_stick_y;
-        //leftG = gamepad2.right_stick_y;
-        //rightG = gamepad2.right_stick_y;
+        leftG = gamepad2.right_stick_y;
+        rightG = gamepad2.right_stick_y;
 
 
         robot.leftDrive.setPower(left);
         robot.rightDrive.setPower(right);
         robot.pulleyMotor.setPower(pulley);
-        //robot.leftGripper.setPosition(leftG);
-        //robot.rightGripper.setPosition(rightG);
+        robot.leftGripper.setPosition(leftG);
+        robot.rightGripper.setPosition(rightG);
 
         // Use gamepad left & right Bumpers to open and close the claw
         if (gamepad1.right_bumper)
@@ -121,26 +121,13 @@ public class Teleop extends OpMode{
             clawOffset -= CLAW_SPEED;
 
         // Move both servos to new position.  Assume servos are mirror image of each other.
-        clawOffset = Range.clip(clawOffset, -0.5, 0.5);
-        robot.leftGripper.setPosition(robot.MID_SERVO + clawOffset);
-        robot.rightGripper.setPosition(robot.MID_SERVO - clawOffset);
+        //clawOffset = Range.clip(clawOffset, -0.5, 0.5);
+        //robot.leftGripper.setPosition(robot.MID_SERVO + clawOffset);
+        //obot.rightGripper.setPosition(robot.MID_SERVO - clawOffset);
 
         // Use gamepad buttons to move the arm up (Y) and down (A)
-        if (gamepad2.a) {
-            robot.leftGripper.setPosition(0.0);
-            robot.rightGripper.setPosition(0.0);
-        }
-        else if (gamepad2.b) {
-            robot.leftGripper.setPosition(90);
-            robot.rightGripper.setPosition(-90);
-        }
-        else if (gamepad2.y){
-            robot.leftGripper.setPosition(45);
-            robot.rightGripper.setPosition(-45);
-        }
-        else if (gamepad2.x){
-            robot.colorArm.setPosition(0);
-        }
+
+
 
 
         // Send telemetry message to signify robot running;

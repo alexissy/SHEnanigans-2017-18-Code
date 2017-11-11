@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.ConceptVuforiaNavigation;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.Func;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
@@ -17,7 +16,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-//import org.firstinspires.ftc.robotcore.external.navigation.Orientation.AngleSet;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
@@ -26,6 +24,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 import java.util.Locale;
+
+//import org.firstinspires.ftc.robotcore.external.navigation.Orientation.AngleSet;
 
 /** * This file illustrates the concept of driving a path based on Gyro heading and encoder counts.
  *
@@ -45,8 +45,8 @@ import java.util.Locale;
 // This is consistent with the FTC field coordinate conventions set out in the document: * ftc_app\doc\tutorial\FTC_FieldCoordinateSystemDefi nition.pdf * *
 // Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name. *
 // Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list */
-@Autonomous(name="Red: CryptoKeyVuMarks", group="Red_Auto:")
-public class RedAutonomous_CryptoKeyVuMarks extends LinearOpMode {
+@Autonomous(name="Blue: CryptoKeyVuMarks", group="Blue_Auto:")
+public class BlueAutonomous_CryptoKeyVuMarks extends LinearOpMode {
     /* Declare OpMode members. */
     TeleopHardware robot = new TeleopHardware(); // Use a Pushbot's hardware
     BNO055IMU imu;

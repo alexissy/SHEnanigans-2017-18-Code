@@ -8,22 +8,14 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.ConceptVuforiaNavigation;
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.Func;
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-//import org.firstinspires.ftc.robotcore.external.navigation.Orientation.AngleSet;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
-import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 import java.util.Locale;
 
@@ -45,16 +37,13 @@ import java.util.Locale;
 // This is consistent with the FTC field coordinate conventions set out in the document: * ftc_app\doc\tutorial\FTC_FieldCoordinateSystemDefi nition.pdf * *
 // Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name. *
 // Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list */
-@Autonomous(name="Red: CryptoKeyVuMarks", group="Red_Auto:")
-public class RedAutonomous_CryptoKeyVuMarks extends LinearOpMode {
+@Autonomous(name="Test: BlueSideCryptoBoxRightNoVuforia", group="Basics")
+public class TestAutonomous_BlueSideCryptoBoxRightNoVuforia extends LinearOpMode {
     /* Declare OpMode members. */
     TeleopHardware robot = new TeleopHardware(); // Use a Pushbot's hardware
     BNO055IMU imu;
     Orientation angles;
     Acceleration gravity;
-    String TAG = "Vuforia VuMark Sample";
-    OpenGLMatrix lastLocation = null;
-    VuforiaLocalizer vuforia;
 
     static final double COUNTS_PER_MOTOR_REV = 1440 ; // eg: TETRIX Motor Encoder
     static final double DRIVE_GEAR_REDUCTION = 2.0 ; // This is < 1.0 if geared UP
@@ -74,8 +63,7 @@ public class RedAutonomous_CryptoKeyVuMarks extends LinearOpMode {
         robot.init(hardwareMap); // Set up the parameters with which we will use our IMU.
         // Note that integration algorithm here just reports accelerations to the logcat log; it doesn't actually provide positional information.
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES; parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
         parameters.loggingEnabled = true;
         parameters.loggingTag = "IMU";
@@ -102,15 +90,14 @@ public class RedAutonomous_CryptoKeyVuMarks extends LinearOpMode {
         robot.pulleyMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //robot.motorBackRight.setMode(DcMotor.RunMode.RUN_U SING_ENCODER);
         // Wait for the game to start (Display Gyro value), and reset gyro before we move..
-        robot.leftGripper.setPosition(85);
-        robot.rightGripper.setPosition(85);
+        robot.leftGripper.setPosition(0);
+        robot.rightGripper.setPosition(0);
 
         while (!isStarted()) {
             angles = imu.getAngularOrientation();
             telemetry.addData(">", "Robot Heading = %s", formatAngle(angles.angleUnit, angles.firstAngle));
             telemetry.update();
-            idle();
-        }
+            idle(); }
 
         imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
         // Step through each leg of the path,
@@ -118,67 +105,22 @@ public class RedAutonomous_CryptoKeyVuMarks extends LinearOpMode {
         // Put a hold after each turn
 
 
-        //get the VuMark reading
+        gyroDrive(DRIVE_SPEED, -25.0, 0); // Drive FWD 48 inches
+        //gyroTurn(TURN_SPEED, -90.0);
+        //gyroDrive(DRIVE_SPEED, 1.0, 0.0);
+        //robot.leftGripper.setPosition(90.0);
+        //robot.rightGripper.setPosition(90.0);
+        //gyroTurn( TURN_SPEED, -45.0); // Turn CCW to -45 Degrees
+        //gyroHold( TURN_SPEED, -45.0, 0.5); // Hold -45 Deg heading for a 1/2 second
+        //gyroTurn( TURN_SPEED, 45.0); // Turn CW to 45 Degrees
+        //gyroHold( TURN_SPEED, 45.0, 0.5); // Hold 45 Deg heading for a 1/2 second
+        //gyroTurn( TURN_SPEED, 0.0); // Turn CW to 0 Degrees
+        //gyroHold( TURN_SPEED, 0.0, 1.0); // Hold 0 Deg heading for a 1 second
+        //gyroDrive(DRIVE_SPEED,-25.0, 0.0); // Drive REV 48 inches
+        //gyroHold( TURN_SPEED, 0.0, 0.5); // Hold 0 Deg heading for a 1/2 second
 
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        VuforiaLocalizer.Parameters parametersVuMarks = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-
-        parametersVuMarks.vuforiaLicenseKey = "AYzF2d//////AAAAGepJXX6AgUJghxGbM6TK9Y4C7DyO2RWFhUN5PAxtZ40p51r4ezECaw/bd1uVxmRHyyrGyJgIeYKoP5zMKrBewDmpfXP2AeGT9rvU/+JMwMUXs/Q0gEEQnq3YO2Y22qwfZqIH9UP9zdFFjHcR8CKkqlv3d7k37JAdIL+uhNNcI8xNWN4HNv3DnAdrDkjytUe9hm15U71G62FWjDoV2EmHMV6dgnoGIidY0TrEdX1ye0Ulrsn9ixL2hAJikDWi14mZaLZduSKtToZZsXZ47eZ1stK/Xfrkw6eFX6fm0ATMaSNVtecHY5dV+8up/mZ+TC4Sz/BDuAjO0j5r7xhjc6wdt355MAJDQzRP3LU63u4BEoWn";
-        parametersVuMarks.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
-        this.vuforia = ClassFactory.createVuforiaLocalizer(parametersVuMarks);
-
-        VuforiaTrackables relicTrackables = this.vuforia.loadTrackablesFromAsset("RelicVuMark");
-        VuforiaTrackable relicTemplate = relicTrackables.get(0);
-        relicTemplate.setName("relicVuMarkTemplate");
-
-        relicTrackables.activate();
-
-        while (opModeIsActive()) {
-            RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
-
-            if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
-
-                if (vuMark == RelicRecoveryVuMark.LEFT) {
-
-
-                    gyroDrive(DRIVE_SPEED, 25.0, 0.0); // Drive FWD 48 inches
-                    //gyroTurn(TURN_SPEED, -45.0); // Turn CCW to -45 Degrees
-                    //gyroHold(TURN_SPEED, -45.0, 0.5); // Hold -45 Deg heading for a 1/2 second
-                    //gyroTurn(TURN_SPEED, 45.0); // Turn CW to 45 Degrees
-                    //gyroHold(TURN_SPEED, 45.0, 0.5); // Hold 45 Deg heading for a 1/2 second
-                    //gyroTurn(TURN_SPEED, 0.0); // Turn CW to 0 Degrees
-                    //gyroHold(TURN_SPEED, 0.0, 1.0); // Hold 0 Deg heading for a 1 second
-                    //gyroDrive(DRIVE_SPEED, -25.0, 0.0); // Drive REV 48 inches
-                    //gyroHold(TURN_SPEED, 0.0, 0.5); // Hold 0 Deg heading for a 1/2 second
-
-                    telemetry.addData("Left Path", "Complete");
-                    telemetry.update();
-                }
-
-                if (vuMark == RelicRecoveryVuMark.CENTER) {
-                    gyroDrive(DRIVE_SPEED, 25.0, 0.0);
-                    gyroTurn(TURN_SPEED, -45.0);
-
-                    telemetry.addData("Center Path", "Complete");
-                    telemetry.update();
-                }
-
-                if (vuMark == RelicRecoveryVuMark.RIGHT) {
-                    gyroDrive(DRIVE_SPEED, 25.0, 0.0);
-                    gyroTurn(TURN_SPEED, 45.0);
-
-                    telemetry.addData("Right Path", "Complete");
-                    telemetry.update();
-                }
-            }
-            if (vuMark == RelicRecoveryVuMark.UNKNOWN) {
-                gyroDrive(DRIVE_SPEED, 0.0, 0.0);
-
-                telemetry.addData("No Crypto Key Path", "Complete");
-                telemetry.update();
-            }
-        }
-    }
+        telemetry.addData("Path", "Complete");
+        telemetry.update(); }
 
     /** * Method to drive on a fixed compass bearing (angle), based on encoder counts. *
      *  Move will stop if either of these conditions occur:
@@ -344,7 +286,7 @@ public class RedAutonomous_CryptoKeyVuMarks extends LinearOpMode {
         }
         // Send desired speeds to motors.
         robot.leftDrive.setPower(leftSpeed);
-        robot.rightDrive.setPower(rightSpeed);
+        robot.rightDrive.setPower(-rightSpeed);
          // Display it for the driver.
         telemetry.addData("Target", "%5.2f", angle);
         telemetry.addData("Err/St", "%5.2f/%5.2f", error, steer);
