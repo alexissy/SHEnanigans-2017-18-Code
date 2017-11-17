@@ -1,5 +1,6 @@
 package shenanigans_code.shenanigans;
 
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -18,7 +19,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 import java.util.Locale;
-
 /** * This file illustrates the concept of driving a path based on Gyro heading and encoder counts.
  *
  */
@@ -95,17 +95,30 @@ public class TestAutonomous_BlueSideCryptoBoxRightNoVuforia extends LinearOpMode
 
         while (!isStarted()) {
             angles = imu.getAngularOrientation();
+            //telemetry.addData(">", "FirstAngle = %0.1f", angles.firstAngle);
             telemetry.addData(">", "Robot Heading = %s", formatAngle(angles.angleUnit, angles.firstAngle));
             telemetry.update();
             idle(); }
 
         imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+/*
+        while(true) {
+            sleep(3000);
+            angles = imu.getAngularOrientation();
+
+            telemetry.addData(">", "Robot Heading = %s", formatAngle(angles.angleUnit, angles.firstAngle));
+            double error = getError(0.0);
+            double steer = getSteer(error, P_DRIVE_COEFF);
+            telemetry.addData(">", "Error = %5.2f", error);
+            telemetry.addData(">", "Steer = %5.2f", steer);
+            telemetry.update();
+        }*/
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
         // Put a hold after each turn
-
-
-        gyroDrive(DRIVE_SPEED, -25.0, 0); // Drive FWD 48 inches
+        robot. leftGripper.setPosition(90);
+        robot.rightGripper.setPosition(-90);
+       gyroDrive(DRIVE_SPEED, -6.0, 0.0); // Drive FWD 48 inches
         //gyroTurn(TURN_SPEED, -90.0);
         //gyroDrive(DRIVE_SPEED, 1.0, 0.0);
         //robot.leftGripper.setPosition(90.0);
@@ -119,8 +132,9 @@ public class TestAutonomous_BlueSideCryptoBoxRightNoVuforia extends LinearOpMode
         //gyroDrive(DRIVE_SPEED,-25.0, 0.0); // Drive REV 48 inches
         //gyroHold( TURN_SPEED, 0.0, 0.5); // Hold 0 Deg heading for a 1/2 second
 
-        telemetry.addData("Path", "Complete");
-        telemetry.update(); }
+       telemetry.addData("Path", "Complete");
+       telemetry.update();
+    }
 
     /** * Method to drive on a fixed compass bearing (angle), based on encoder counts. *
      *  Move will stop if either of these conditions occur:
@@ -189,8 +203,8 @@ public class TestAutonomous_BlueSideCryptoBoxRightNoVuforia extends LinearOpMode
                     rightSpeed /= max;
                 }
 
-                robot.leftDrive.setPower(leftSpeed);
-                robot.rightDrive.setPower(rightSpeed);
+                robot.leftDrive.setPower(speed);
+                robot.rightDrive.setPower(2.1 * speed);
                 //robot.motorBackLeft.setPower(leftSpeed);
                 // robot.motorBackRight.setPower(rightSpeed);
 
@@ -301,7 +315,9 @@ public class TestAutonomous_BlueSideCryptoBoxRightNoVuforia extends LinearOpMode
     public double getError(double targetAngle) {
         double robotError;
         // calculate error in -179 to +180 range (
-        robotError = targetAngle - (imu.getAngularOrientation().firstAngle);
+        Orientation angles = imu.getAngularOrientation();
+        double currentAngle = AngleUnit.DEGREES.normalize(AngleUnit.DEGREES.fromUnit(angles.angleUnit , angles.firstAngle));
+        robotError = targetAngle - currentAngle;
         while (robotError > 180) robotError -= 360; while (robotError <= -180) robotError += 360;
         return robotError;
 
